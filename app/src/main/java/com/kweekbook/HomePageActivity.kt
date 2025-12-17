@@ -20,6 +20,9 @@ class HomePageActivity : AppCompatActivity() {
             val glowEffect = findViewById<android.view.View>(R.id.glowEffect)
             val enterButton = findViewById<MaterialButton>(R.id.enterButton)
 
+        // Ensure logo is set (safety if layout fails to bind drawable)
+        logoImage.setImageResource(R.drawable.logo_kweekbook)
+
         // Apply entry animation to logo
         val logoEntryAnimation = AnimationUtils.loadAnimation(this, R.anim.logo_entry)
         logoImage.startAnimation(logoEntryAnimation)
@@ -40,6 +43,7 @@ class HomePageActivity : AppCompatActivity() {
 
         // Enter button click
         enterButton.setOnClickListener {
+            enterButton.isEnabled = false
             // Check if user is logged in
             val sharedPrefs = getSharedPreferences("KweekBookPrefs", MODE_PRIVATE)
             val isLoggedIn = sharedPrefs.getBoolean("is_logged_in", false)

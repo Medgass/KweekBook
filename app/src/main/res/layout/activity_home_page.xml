@@ -14,6 +14,10 @@
         android:layout_height="match_parent"
         android:background="@drawable/gradient_primary_accent"
         android:alpha="0.05"
+        android:clickable="false"
+        android:focusable="false"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 
@@ -50,7 +54,8 @@
                 android:layout_height="192dp"
                 android:layout_gravity="center"
                 android:src="@drawable/logo_kweekbook"
-                android:scaleType="fitCenter"
+                android:scaleType="centerInside"
+                android:adjustViewBounds="true"
                 android:contentDescription="@string/app_name" />
         </FrameLayout>
     </com.google.android.material.card.MaterialCardView>
