@@ -9,36 +9,38 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
 import com.kweekbook.adapter.BookAdapter
 import com.kweekbook.data.BooksData
 import com.kweekbook.databinding.ActivityMainBinding
-import com.kweekbook.viewmodel.BookViewModel
-import kotlinx.coroutines.launch
+import com.kweekbook.model.Book
 
 class MainActivity : AppCompatActivity() {
     
     private lateinit var binding: ActivityMainBinding
-    private lateinit var bookViewModel: BookViewModel
     private lateinit var bookAdapter: BookAdapter
     private var isDarkMode = false
     private var selectedCategory = "Tous"
+    private var allBooksCached: List<Book> = emptyList()
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
-        // Setup View Binding
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        
-        // Setup Toolbar
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.title = getString(R.string.app_name)
+        try {
+            // Setup View Binding
+            binding = ActivityMainBinding.inflate(layoutInflater)
+            setContentView(binding.root)
+            
+            // Setup Toolbar
+            setSupportActionBar(binding.toolbar)
+            supportActionBar?.title = getString(R.string.app_name)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "Erreur d'initialisation", Toast.LENGTH_SHORT).show()
+            return
+        }
 
         // Bottom navigation
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottomNavigation)
@@ -49,30 +51,26 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_favorites -> {
                     startActivity(Intent(this, FavoritesActivity::class.java))
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                    finish()
                     true
                 }
                 R.id.nav_profile -> {
                     startActivity(Intent(this, UserProfileActivity::class.java))
                     overridePendingTransition(R.anim.slide_up, R.anim.fade_out)
+                    finish()
                     true
                 }
                 R.id.nav_settings -> {
                     startActivity(Intent(this, SettingsActivity::class.java))
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                    finish()
                     true
                 }
                 else -> false
             }
         }
         
-        // Get user name
-        val userName = getSharedPreferences("KweekBookPrefs", MODE_PRIVATE)
-            .getString("user_name", "Utilisateur") ?: "Utilisateur"
-        
-        // Initialize ViewModel
-        bookViewModel = ViewModelProvider(this)[BookViewModel::class.java]
-        
-        // Initialize Adapter
+        // Initialize Adapter with sample data
         bookAdapter = BookAdapter(
             onBookClick = { book ->
                 val intent = Intent(this, BookDetailActivity::class.java)
@@ -104,23 +102,10 @@ class MainActivity : AppCompatActivity() {
         // Setup Category Chips
         setupCategoryChips()
         
-        // Show loading
-        showLoading(true)
-        
-        // Initialize with sample data (in background)
-        lifecycleScope.launch {
-            try {
-                bookViewModel.insertBooks(BooksData.sampleBooks)
-                showLoading(false)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                showLoading(false)
-                Toast.makeText(this@MainActivity, "Erreur de chargement", Toast.LENGTH_SHORT).show()
-            }
-        }
-        
-        // Observe all books
-        observeAllBooks()
+        // Load sample data directly without database
+        allBooksCached = BooksData.sampleBooks
+        bookAdapter.submitList(allBooksCached)
+        updateEmptyState(allBooksCached.isEmpty())
     }
     
     private fun setupCategoryChips() {
@@ -149,48 +134,19 @@ class MainActivity : AppCompatActivity() {
     }
     
     private fun filterBooks(query: String) {
-        lifecycleScope.launch {
-            try {
-                bookViewModel.allBooks.collect { allBooks ->
-                    var filtered = allBooks
-                    
-                    // Filter by category
-                    if (selectedCategory != "Tous") {
-                        filtered = filtered.filter { it.category == selectedCategory }
-                    }
-                    
-                    // Filter by search query
-                    if (query.isNotEmpty()) {
-                        filtered = filtered.filter {
-                            it.title.contains(query, ignoreCase = true) ||
-                            it.author.contains(query, ignoreCase = true) ||
-                            it.genre.contains(query, ignoreCase = true)
-                        }
-                    }
-                    
-                    bookAdapter.submitList(filtered)
-                    updateEmptyState(filtered.isEmpty())
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                updateEmptyState(true)
+        var filtered = allBooksCached
+        if (selectedCategory != "Tous") {
+            filtered = filtered.filter { it.category == selectedCategory }
+        }
+        if (query.isNotEmpty()) {
+            filtered = filtered.filter {
+                it.title.contains(query, ignoreCase = true) ||
+                it.author.contains(query, ignoreCase = true) ||
+                it.genre.contains(query, ignoreCase = true)
             }
         }
-    }
-    
-    private fun observeAllBooks() {
-        lifecycleScope.launch {
-            try {
-                bookViewModel.allBooks.collect { books ->
-                    bookAdapter.submitList(books)
-                    updateEmptyState(books.isEmpty())
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Toast.makeText(this@MainActivity, "Erreur de chargement des livres", Toast.LENGTH_SHORT).show()
-                updateEmptyState(true)
-            }
-        }
+        bookAdapter.submitList(filtered)
+        updateEmptyState(filtered.isEmpty())
     }
     
     private fun updateEmptyState(isEmpty: Boolean) {

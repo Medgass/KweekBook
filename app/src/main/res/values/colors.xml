@@ -9,10 +9,11 @@
     <color name="white">#FFFFFFFF</color>
     
     <!-- Custom Colors - KweekBook Theme -->
-    <color name="primary">#2D9A3F</color>
+    <!-- Green and Orange for light mode -->
+    <color name="primary">#2D9A3F</color> <!-- Green -->
     <color name="primary_dark">#257A33</color>
     <color name="primary_light">#3DB852</color>
-    <color name="accent">#FF8C00</color>
+    <color name="accent">#FF8C00</color> <!-- Orange -->
     <color name="accent_dark">#E67E00</color>
     
     <!-- Background Colors -->
@@ -37,4 +38,8 @@
     <color name="text_primary">#212121</color>
     <color name="text_secondary">#757575</color>
     <color name="text_tertiary">#BDBDBD</color>
+
+    <!-- UI specific helpers (light) -->
+    <color name="toolbar_color">#FF8C00</color> <!-- Orange header in light -->
+    <color name="bottom_nav_background">#FFFFFF</color>
 </resources>

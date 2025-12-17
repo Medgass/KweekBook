@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Core palette for dark mode -->
+    <color name="primary">#2D9A3F</color> <!-- Green -->
+    <color name="primary_dark">#1E6B2B</color>
+    <color name="primary_light">#3DB852</color>
+    <color name="accent">#FF8C00</color> <!-- Orange -->
+    <color name="accent_dark">#E67E00</color>
+
+    <!-- Background surfaces -->
+    <color name="background">#000000</color> <!-- Black -->
+    <color name="secondary_background">#121212</color>
+    <color name="card">#1E1E1E</color>
+    <color name="border">#33FFFFFF</color>
+
+    <!-- Neutrals -->
+    <color name="gray_light">#2A2A2A</color>
+    <color name="gray_medium">#B0B0B0</color>
+    <color name="gray_dark">#E0E0E0</color>
+
+    <!-- Text colors -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B3FFFFFF</color>
+    <color name="text_tertiary">#80FFFFFF</color>
+
+    <!-- Status colors (kept) -->
+    <color name="success">#2D9A3F</color>
+    <color name="warning">#FF8C00</color>
+    <color name="error">#D4183D</color>
+    <color name="destructive">#D4183D</color>
+    <color name="info">#64B5F6</color>
+
+    <!-- UI specific helpers -->
+    <color name="toolbar_color">#000000</color>
+    <color name="bottom_nav_background">#121212</color>
+</resources>

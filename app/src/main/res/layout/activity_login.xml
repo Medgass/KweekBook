@@ -52,7 +52,7 @@
                         android:layout_width="128dp"
                         android:layout_height="128dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/logo_kweekbook"
+                        android:src="@mipmap/logo_kweekbook"
                         android:contentDescription="@string/app_name" />
                 </FrameLayout>
 
@@ -108,6 +108,8 @@
                     android:hint="@string/email"
                     app:boxBackgroundMode="filled"
                     app:boxBackgroundColor="@color/secondary_background"
+                    app:hintTextColor="@color/text_secondary"
+                    app:boxStrokeColor="@color/primary"
                     app:boxCornerRadiusTopStart="@dimen/radius_medium"
                     app:boxCornerRadiusTopEnd="@dimen/radius_medium"
                     app:boxCornerRadiusBottomStart="@dimen/radius_medium"
@@ -120,7 +122,9 @@
                         android:id="@+id/emailInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress" />
+                        android:inputType="textEmailAddress"
+                        android:textColor="@color/text_primary"
+                        android:textColorHint="@color/text_secondary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Password Field -->
@@ -131,6 +135,8 @@
                     android:hint="@string/password"
                     app:boxBackgroundMode="filled"
                     app:boxBackgroundColor="@color/secondary_background"
+                    app:hintTextColor="@color/text_secondary"
+                    app:boxStrokeColor="@color/primary"
                     app:boxCornerRadiusTopStart="@dimen/radius_medium"
                     app:boxCornerRadiusTopEnd="@dimen/radius_medium"
                     app:boxCornerRadiusBottomStart="@dimen/radius_medium"
@@ -144,7 +150,9 @@
                         android:id="@+id/passwordInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textPassword" />
+                        android:inputType="textPassword"
+                        android:textColor="@color/text_primary"
+                        android:textColorHint="@color/text_secondary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <!-- Login/Sign Up Button -->

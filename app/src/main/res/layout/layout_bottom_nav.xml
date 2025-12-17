@@ -4,7 +4,7 @@
     android:id="@+id/bottomNavigation"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:background="@color/bottom_nav_background"
     app:itemIconTint="@color/text_primary"
     app:itemRippleColor="@color/accent"
     app:itemTextColor="@color/text_primary"

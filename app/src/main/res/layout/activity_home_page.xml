@@ -53,7 +53,7 @@
                 android:layout_width="192dp"
                 android:layout_height="192dp"
                 android:layout_gravity="center"
-                android:src="@drawable/logo_kweekbook"
+                android:src="@mipmap/logo_kweekbook"
                 android:scaleType="centerInside"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/app_name" />
@@ -95,7 +95,7 @@
         android:layout_width="0dp"
         android:layout_height="@dimen/button_height"
         android:text="@string/enter_library"
-        android:textSize="@dimen/text_size_medium"
+        android:textSize="@dimen/text_size_large"
         android:textStyle="bold"
         android:background="@drawable/gradient_primary_accent"
         android:textColor="@color/white"
@@ -105,7 +105,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginStart="@dimen/spacing_48"
-        android:layout_marginEnd="@dimen/spacing_48" />
+        android:layout_marginStart="@dimen/spacing_32"
+        android:layout_marginEnd="@dimen/spacing_32" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

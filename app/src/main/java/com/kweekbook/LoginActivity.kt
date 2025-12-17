@@ -18,9 +18,18 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        // Set logo
+        // Set logo with safety
         val logoImage = findViewById<ImageView>(R.id.logoImage)
-        logoImage?.setImageResource(R.drawable.logo_kweekbook)
+        try {
+            logoImage?.setImageResource(R.drawable.logo_kweekbook)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            try {
+                logoImage?.setImageResource(R.mipmap.ic_launcher)
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
 
         val nameInputLayout = findViewById<TextInputLayout>(R.id.nameInputLayout)
         val nameInput = findViewById<TextInputEditText>(R.id.nameInput)
@@ -38,6 +47,7 @@ class LoginActivity : AppCompatActivity() {
 
         // Login/Sign Up button
         loginButton.setOnClickListener {
+            loginButton.isEnabled = false
             val email = emailInput.text.toString().trim()
             val password = passwordInput.text.toString().trim()
             val name = nameInput.text.toString().trim()
@@ -60,7 +70,10 @@ class LoginActivity : AppCompatActivity() {
                 hasError = true
             }
             
-            if (hasError) return@setOnClickListener
+            if (hasError) {
+                loginButton.isEnabled = true
+                return@setOnClickListener
+            }
 
             // Save user info
             val sharedPrefs = getSharedPreferences("KweekBookPrefs", MODE_PRIVATE)
@@ -71,6 +84,8 @@ class LoginActivity : AppCompatActivity() {
             editor.apply()
 
             // Navigate to main activity
+            android.util.Log.d("NAV_DEBUG", "LoginActivity: Navigation vers MainActivity")
+            android.widget.Toast.makeText(this, "Connexion réussie!", android.widget.Toast.LENGTH_SHORT).show()
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)

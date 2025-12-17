@@ -14,14 +14,18 @@
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            app:elevation="0dp">
+            android:background="@color/toolbar_color"
+            app:elevation="4dp">
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@android:color/transparent" />
+                android:background="@color/toolbar_color"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:titleTextColor="@color/white"
+                app:logo="@mipmap/logo_kweekbook"
+                app:titleMarginStart="8dp" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <!-- Profile Header -->

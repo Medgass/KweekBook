@@ -31,17 +31,20 @@ class UserProfileActivity : AppCompatActivity() {
                 R.id.nav_home -> {
                     startActivity(Intent(this, MainActivity::class.java))
                     overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
+                    finish()
                     true
                 }
                 R.id.nav_favorites -> {
                     startActivity(Intent(this, FavoritesActivity::class.java))
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                    finish()
                     true
                 }
                 R.id.nav_profile -> true
                 R.id.nav_settings -> {
                     startActivity(Intent(this, SettingsActivity::class.java))
                     overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                    finish()
                     true
                 }
                 else -> false
