@@ -1,11 +1,13 @@
 package com.kweekbook
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
@@ -15,6 +17,7 @@ import com.kweekbook.model.Book
 
 class BookDetailActivity : AppCompatActivity() {
 
+    private lateinit var sourceBook: Book
     private lateinit var book: Book
     private var isFavorite = false
 
@@ -33,6 +36,12 @@ class BookDetailActivity : AppCompatActivity() {
 
         // Load book data from in-memory dataset
         loadBookDetails(bookId)
+
+        // Back button
+        findViewById<MaterialButton>(R.id.buttonBackDetail)?.setOnClickListener {
+            finish()
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right)
+        }
     }
 
     private fun loadBookDetails(bookId: Int) {
@@ -41,14 +50,27 @@ class BookDetailActivity : AppCompatActivity() {
             finish()
             return
         }
-        book = found
+        sourceBook = found
 
         // Initialize favorite state from SharedPreferences
         val prefs = getSharedPreferences("KweekBookPrefs", MODE_PRIVATE)
         val favIds = prefs.getStringSet("favorite_ids", emptySet()) ?: emptySet()
         isFavorite = favIds.contains(book.id.toString())
-
+        book = applyStatusOverrides(sourceBook)
         displayBookDetails()
+    }
+
+    private fun applyStatusOverrides(b: Book): Book {
+        val prefs = getSharedPreferences("KweekBookPrefs", MODE_PRIVATE)
+        val borrowed = prefs.getStringSet("borrowed_ids", emptySet()) ?: emptySet()
+        val reserved = prefs.getStringSet("reserved_ids", emptySet()) ?: emptySet()
+        val effectiveStatus = when {
+            borrowed.contains(b.id.toString()) -> "borrowed"
+            reserved.contains(b.id.toString()) -> "reserved"
+            else -> b.status
+        }
+        val effectiveAvailable = if (effectiveStatus == "borrowed") 0 else b.availableCopies
+        return b.copy(status = effectiveStatus, availableCopies = effectiveAvailable)
     }
 
     private fun displayBookDetails() {
@@ -103,23 +125,59 @@ class BookDetailActivity : AppCompatActivity() {
         }
 
         // Borrow button
-        findViewById<MaterialButton>(R.id.borrowButton).apply {
-            isEnabled = book.status == "available"
-            text = when (book.status) {
-                "available" -> "Emprunter"
-                "borrowed" -> "Emprunté"
-                else -> "Réservé"
+        val borrowBtn = findViewById<MaterialButton>(R.id.borrowButton)
+        val prefs = getSharedPreferences("KweekBookPrefs", MODE_PRIVATE)
+        val reservedSet = prefs.getStringSet("reserved_ids", emptySet())?.toMutableSet() ?: mutableSetOf()
+        val borrowedSet = prefs.getStringSet("borrowed_ids", emptySet())?.toMutableSet() ?: mutableSetOf()
+
+        fun refreshBorrowButton() {
+            val isBorrowed = borrowedSet.contains(book.id.toString())
+            val isReserved = reservedSet.contains(book.id.toString())
+            when {
+                book.status == "available" && !isBorrowed -> {
+                    borrowBtn.isEnabled = true
+                    borrowBtn.text = "Emprunter"
+                }
+                isReserved -> {
+                    borrowBtn.isEnabled = true
+                    borrowBtn.text = "Annuler Réservation"
+                }
+                else -> {
+                    borrowBtn.isEnabled = true
+                    borrowBtn.text = "Réserver"
+                }
             }
-            setOnClickListener {
-                Toast.makeText(this@BookDetailActivity, "Emprunter: ${book.title}", Toast.LENGTH_SHORT).show()
+        }
+
+        refreshBorrowButton()
+        borrowBtn.setOnClickListener {
+            val idStr = book.id.toString()
+            val isBorrowed = borrowedSet.contains(idStr)
+            val isReserved = reservedSet.contains(idStr)
+
+            if (book.status == "available" && !isBorrowed) {
+                borrowedSet.add(idStr)
+                reservedSet.remove(idStr)
+                prefs.edit().putStringSet("borrowed_ids", borrowedSet).putStringSet("reserved_ids", reservedSet).apply()
+                book = applyStatusOverrides(sourceBook)
+                displayBookDetails() // refresh UI including badge and counts
+            } else {
+                if (isReserved) {
+                    reservedSet.remove(idStr)
+                } else {
+                    reservedSet.add(idStr)
+                }
+                prefs.edit().putStringSet("reserved_ids", reservedSet).apply()
+                book = applyStatusOverrides(sourceBook)
+                displayBookDetails()
             }
         }
     }
 
     private fun updateFavoriteIcon() {
-        findViewById<FloatingActionButton>(R.id.fabFavorite).setImageResource(
-            if (isFavorite) R.drawable.ic_heart_filled else R.drawable.ic_heart
-        )
+        val fab = findViewById<FloatingActionButton>(R.id.fabFavorite)
+        fab.setImageResource(if (isFavorite) R.drawable.ic_heart_filled else R.drawable.ic_heart)
+        fab.imageTintList = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.white))
     }
 
     private fun persistFavoriteState(favorite: Boolean) {

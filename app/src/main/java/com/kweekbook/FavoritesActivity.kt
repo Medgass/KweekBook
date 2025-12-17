@@ -73,7 +73,9 @@ class FavoritesActivity : AppCompatActivity() {
         val prefs = getSharedPreferences("KweekBookPrefs", MODE_PRIVATE)
         val favIds = prefs.getStringSet("favorite_ids", emptySet()) ?: emptySet()
         val favIdInts = favIds.mapNotNull { it.toIntOrNull() }.toSet()
-        val favorites: List<Book> = BooksData.sampleBooks.filter { favIdInts.contains(it.id) }
+        val favorites: List<Book> = applyStatusOverrides(
+            BooksData.sampleBooks.filter { favIdInts.contains(it.id) }
+        )
 
         val emptyView = findViewById<View>(R.id.emptyFavorites)
         val rv = findViewById<RecyclerView>(R.id.favoritesRecyclerView)
@@ -85,5 +87,20 @@ class FavoritesActivity : AppCompatActivity() {
             rv.visibility = View.VISIBLE
         }
         adapter.submitList(favorites)
+    }
+
+    private fun applyStatusOverrides(list: List<Book>): List<Book> {
+        val prefs = getSharedPreferences("KweekBookPrefs", MODE_PRIVATE)
+        val borrowed = prefs.getStringSet("borrowed_ids", emptySet()) ?: emptySet()
+        val reserved = prefs.getStringSet("reserved_ids", emptySet()) ?: emptySet()
+        return list.map { b ->
+            val status = when {
+                borrowed.contains(b.id.toString()) -> "borrowed"
+                reserved.contains(b.id.toString()) -> "reserved"
+                else -> b.status
+            }
+            val available = if (status == "borrowed") 0 else b.availableCopies
+            b.copy(status = status, availableCopies = available)
+        }
     }
 }

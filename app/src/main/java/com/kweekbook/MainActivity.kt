@@ -102,8 +102,8 @@ class MainActivity : AppCompatActivity() {
         setupCategoryChips()
         setupFooterReveal()
         
-        // Load sample data directly without database
-        allBooksCached = BooksData.sampleBooks
+        // Load sample data with status overrides from preferences
+        allBooksCached = applyStatusOverrides(BooksData.sampleBooks)
         bookAdapter.submitList(allBooksCached)
         updateEmptyState(allBooksCached.isEmpty())
     }
@@ -166,6 +166,8 @@ class MainActivity : AppCompatActivity() {
     }
     
     private fun filterBooks(query: String) {
+        // Refresh overrides so list reflects new borrow/reserve state
+        allBooksCached = applyStatusOverrides(BooksData.sampleBooks)
         var filtered = allBooksCached
         if (selectedCategory != "Tous") {
             filtered = filtered.filter { it.category == selectedCategory }
@@ -179,6 +181,21 @@ class MainActivity : AppCompatActivity() {
         }
         bookAdapter.submitList(filtered)
         updateEmptyState(filtered.isEmpty())
+    }
+
+    private fun applyStatusOverrides(list: List<Book>): List<Book> {
+        val prefs = getSharedPreferences("KweekBookPrefs", MODE_PRIVATE)
+        val borrowed = prefs.getStringSet("borrowed_ids", emptySet()) ?: emptySet()
+        val reserved = prefs.getStringSet("reserved_ids", emptySet()) ?: emptySet()
+        return list.map { b ->
+            val status = when {
+                borrowed.contains(b.id.toString()) -> "borrowed"
+                reserved.contains(b.id.toString()) -> "reserved"
+                else -> b.status
+            }
+            val available = if (status == "borrowed") 0 else b.availableCopies
+            b.copy(status = status, availableCopies = available)
+        }
     }
     
     private fun updateEmptyState(isEmpty: Boolean) {
