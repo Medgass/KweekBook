@@ -1,0 +1,3 @@
+package com.kweekbook
+
+class ExampleInstrumentedTest_Duplicate

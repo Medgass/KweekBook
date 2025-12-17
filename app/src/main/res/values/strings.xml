@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">KweekBook</string>
+    
+    <!-- Main Activity -->
+    <string name="title_main">Mes Livres</string>
+    <string name="search_hint">Rechercher un livre...</string>
+    <string name="empty_books_title">Aucun livre trouvé</string>
+    <string name="empty_books_message">Commencez à ajouter des livres à votre bibliothèque</string>
+    
+    <!-- Book Item -->
+    <string name="book_title">Titre</string>
+    <string name="book_author">Auteur</string>
+    <string name="book_category">Catégorie</string>
+    <string name="button_borrow">Emprunter</string>
+    <string name="button_reserve">Réserver</string>
+    <string name="button_return">Retourner</string>
+    
+    <!-- Book Detail -->
+    <string name="title_book_detail">Détail du Livre</string>
+    <string name="label_genre">Genre:</string>
+    <string name="label_year">Année:</string>
+    <string name="label_pages">Pages:</string>
+    <string name="label_language">Langue:</string>
+    <string name="label_publisher">Éditeur:</string>
+    <string name="label_isbn">ISBN:</string>
+    <string name="label_available_copies">Copies disponibles:</string>
+    <string name="label_total_copies">Copies totales:</string>
+    <string name="description_label">Description</string>
+    
+    <!-- Homepage -->
+    <string name="discover_next_read">Découvrez votre prochaine lecture</string>
+    <string name="enter_library">Entrer dans la bibliothèque</string>
+    
+    <!-- Login Activity -->
+    <string name="title_login">Connexion</string>
+    <string name="login_subtitle">Connectez-vous à votre compte</string>
+    <string name="signup_subtitle">Créer un compte</string>
+    <string name="full_name">Nom complet</string>
+    <string name="email">Email</string>
+    <string name="password">Mot de passe</string>
+    <string name="email_hint">exemple@email.com</string>
+    <string name="password_hint">••••••••</string>
+    <string name="login">Se connecter</string>
+    <string name="sign_up">S\'inscrire</string>
+    <string name="no_account_sign_up">Pas encore de compte ? <b>S\'inscrire</b></string>
+    <string name="have_account_login">Vous avez déjà un compte ? <b>Se connecter</b></string>
+    <string name="button_signup">Créer un compte</string>
+    <string name="forgot_password">Mot de passe oublié?</string>
+    <string name="login_error">Email ou mot de passe incorrect</string>
+    
+    <!-- User Profile Activity -->
+    <string name="title_profile">Mon Profil</string>
+    <string name="label_username">Nom d\'utilisateur</string>
+    <string name="label_email">Email</string>
+    <string name="label_active_borrows">Emprunts actifs</string>
+    <string name="label_completed_borrows">Emprunts complétés</string>
+    <string name="label_favorites">Favoris</string>
+    <string name="button_logout">Déconnexion</string>
+    <string name="button_settings">Paramètres</string>
+    <string name="button_about">À propos</string>
+    
+    <!-- Navigation -->
+    <string name="nav_home">Accueil</string>
+    <string name="nav_search">Recherche</string>
+    <string name="nav_profile">Profil</string>
+    
+    <!-- Messages -->
+    <string name="success_message">Opération réussie</string>
+    <string name="error_message">Une erreur est survenue</string>
+    <string name="loading">Chargement...</string>
+</resources>
