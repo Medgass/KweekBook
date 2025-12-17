@@ -10,23 +10,22 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Toolbar -->
-        <com.google.android.material.appbar.AppBarLayout
+        <!-- Header removed as requested -->
+
+        <!-- Simple Back Button (no top AppBar) -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/toolbar_color"
-            app:elevation="4dp">
+            android:orientation="horizontal"
+            android:padding="16dp">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@color/toolbar_color"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-                app:titleTextColor="@color/white"
-                app:logo="@mipmap/logo_kweekbook"
-                app:titleMarginStart="8dp" />
-        </com.google.android.material.appbar.AppBarLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/buttonBack"
+                style="@style/Widget.Material3.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Retour" />
+        </LinearLayout>
 
         <!-- Profile Header -->
         <LinearLayout
@@ -257,7 +256,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <!-- Account Actions -->
+        <!-- Account Actions / Edit Profile -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -265,77 +264,84 @@
             android:padding="@dimen/spacing_16"
             android:layout_marginTop="@dimen/spacing_24">
 
-            <!-- Quick Links Row -->
-            <LinearLayout
+            <!-- Edit Profile Section -->
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="@dimen/spacing_16">
+                android:text="Modifier Mon Profil"
+                android:textSize="@dimen/text_size_xlarge"
+                android:textStyle="bold"
+                android:layout_marginBottom="@dimen/spacing_16" />
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnSettings"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/button_height"
-                    android:layout_weight="1"
-                    android:text="Paramètres"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    app:cornerRadius="@dimen/radius_medium" />
-
-                <Space
-                    android:layout_width="@dimen/spacing_8"
-                    android:layout_height="wrap_content" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnNotifications"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/button_height"
-                    android:layout_weight="1"
-                    android:text="Notifications"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    app:cornerRadius="@dimen/radius_medium" />
-            </LinearLayout>
-
-            <LinearLayout
+            <!-- Name Field -->
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
+                android:hint="Nom"
+                app:boxBackgroundMode="filled"
+                app:boxCornerRadiusBottomStart="@dimen/radius_medium"
+                app:boxCornerRadiusBottomEnd="@dimen/radius_medium"
+                app:boxCornerRadiusTopStart="@dimen/radius_medium"
+                app:boxCornerRadiusTopEnd="@dimen/radius_medium"
+                android:layout_marginBottom="@dimen/spacing_12">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Email Field -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                app:boxBackgroundMode="filled"
+                app:boxCornerRadiusBottomStart="@dimen/radius_medium"
+                app:boxCornerRadiusBottomEnd="@dimen/radius_medium"
+                app:boxCornerRadiusTopStart="@dimen/radius_medium"
+                app:boxCornerRadiusTopEnd="@dimen/radius_medium"
+                android:layout_marginBottom="@dimen/spacing_12">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Password Field -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nouveau Mot de Passe"
+                app:boxBackgroundMode="filled"
+                app:boxCornerRadiusBottomStart="@dimen/radius_medium"
+                app:boxCornerRadiusBottomEnd="@dimen/radius_medium"
+                app:boxCornerRadiusTopStart="@dimen/radius_medium"
+                app:boxCornerRadiusTopEnd="@dimen/radius_medium"
+                app:endIconMode="password_toggle"
                 android:layout_marginBottom="@dimen/spacing_16">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnFavorites"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/button_height"
-                    android:layout_weight="1"
-                    android:text="Favoris"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    app:cornerRadius="@dimen/radius_medium" />
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/editPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                <Space
-                    android:layout_width="@dimen/spacing_8"
-                    android:layout_height="wrap_content" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnBorrowHistory"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/button_height"
-                    android:layout_weight="1"
-                    android:text="Historique"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
-                    app:cornerRadius="@dimen/radius_medium" />
-            </LinearLayout>
-
-            <!-- Edit Profile Button -->
+            <!-- Save Button -->
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/editProfileButton"
+                android:id="@+id/btnSaveProfile"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/button_height"
-                android:text="Modifier le profil"
-                android:textSize="@dimen/text_size_medium"
+                android:text="Enregistrer Modifications"
                 android:textStyle="bold"
                 android:background="@drawable/gradient_primary_accent"
                 android:textColor="@color/white"
                 app:cornerRadius="@dimen/radius_medium"
-                android:layout_marginBottom="@dimen/spacing_12" />
+                android:layout_marginBottom="@dimen/spacing_16" />
 
             <!-- Logout Button -->
             <com.google.android.material.button.MaterialButton
@@ -343,17 +349,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/button_height"
                 android:text="Se déconnecter"
-                android:textSize="@dimen/text_size_medium"
                 android:textStyle="bold"
                 android:textColor="@color/destructive"
                 app:strokeColor="@color/destructive"
                 app:strokeWidth="2dp"
                 style="@style/Widget.Material3.Button.OutlinedButton"
-                app:cornerRadius="@dimen/radius_medium"
-                android:layout_marginBottom="@dimen/spacing_24" />
+                app:cornerRadius="@dimen/radius_medium" />
         </LinearLayout>
 
-        <!-- Bottom Navigation inside profile for quick switching -->
+        <!-- Footer -->
+        <include
+            layout="@layout/footer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_16" />
+
+        <!-- Bottom Navigation -->
         <include
             layout="@layout/layout_bottom_nav"
             android:layout_width="match_parent"

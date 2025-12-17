@@ -41,5 +41,5 @@
 
     <!-- UI specific helpers (light) -->
     <color name="toolbar_color">#FF8C00</color> <!-- Orange header in light -->
-    <color name="bottom_nav_background">#FFFFFF</color>
+    <color name="bottom_nav_background">@color/accent</color>
 </resources>

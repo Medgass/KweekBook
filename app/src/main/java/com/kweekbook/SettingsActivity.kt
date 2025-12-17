@@ -3,7 +3,9 @@ package com.kweekbook
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SwitchCompat
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import androidx.appcompat.app.AppCompatDelegate
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +37,22 @@ class SettingsActivity : AppCompatActivity() {
                 R.id.nav_settings -> true
                 else -> false
             }
+        }
+
+        // Dark mode toggle (persist + apply)
+        val darkModeSwitch = findViewById<SwitchCompat>(R.id.darkModeSwitch)
+        val prefs = getSharedPreferences("KweekBookPrefs", MODE_PRIVATE)
+        val isDarkSaved = prefs.getBoolean("dark_mode", false)
+        darkModeSwitch.isChecked = isDarkSaved
+
+        darkModeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            prefs.edit().putBoolean("dark_mode", isChecked).apply()
+            AppCompatDelegate.setDefaultNightMode(
+                if (isChecked) AppCompatDelegate.MODE_NIGHT_YES
+                else AppCompatDelegate.MODE_NIGHT_NO
+            )
+            // Ensure immediate UI update for this screen
+            recreate()
         }
     }
 }

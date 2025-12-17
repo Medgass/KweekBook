@@ -1,6 +1,7 @@
 package com.kweekbook
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -9,7 +10,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import com.kweekbook.adapter.BookAdapter
@@ -32,10 +35,6 @@ class MainActivity : AppCompatActivity() {
             // Setup View Binding
             binding = ActivityMainBinding.inflate(layoutInflater)
             setContentView(binding.root)
-            
-            // Setup Toolbar
-            setSupportActionBar(binding.toolbar)
-            supportActionBar?.title = getString(R.string.app_name)
         } catch (e: Exception) {
             e.printStackTrace()
             Toast.makeText(this, "Erreur d'initialisation", Toast.LENGTH_SHORT).show()
@@ -101,6 +100,7 @@ class MainActivity : AppCompatActivity() {
         
         // Setup Category Chips
         setupCategoryChips()
+        setupFooterReveal()
         
         // Load sample data directly without database
         allBooksCached = BooksData.sampleBooks
@@ -110,20 +110,35 @@ class MainActivity : AppCompatActivity() {
     
     private fun setupCategoryChips() {
         val categories = listOf("Tous", "Classiques", "Philosophie", "Jeunesse", "Poésie")
-        
+
+        val accent = ContextCompat.getColor(this, R.color.accent)
+        val accentDark = ContextCompat.getColor(this, R.color.accent_dark)
+        val neutral = ContextCompat.getColor(this, R.color.secondary_background)
+        val textPrimary = ContextCompat.getColor(this, R.color.text_primary)
+
+        val chipBackground = ColorStateList(
+            arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf()),
+            intArrayOf(accent, neutral)
+        )
+        val chipTextColors = ColorStateList(
+            arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf()),
+            intArrayOf(ContextCompat.getColor(this, R.color.white), textPrimary)
+        )
+        val chipStroke = ColorStateList.valueOf(accentDark)
+
         categories.forEach { category ->
             val chip = Chip(this).apply {
                 text = category
                 isCheckable = true
                 isChecked = category == "Tous"
-                // Style to match shadcn/ui chips
-                setChipBackgroundColorResource(R.color.white)
-                setTextColor(resources.getColor(R.color.text_primary, theme))
-                setRippleColorResource(R.color.accent)
+                chipBackgroundColor = chipBackground
+                setTextColor(chipTextColors)
+                rippleColor = ColorStateList.valueOf(accentDark)
                 setEnsureMinTouchTargetSize(false)
                 setPadding(24, 12, 24, 12)
-                setChipStrokeWidth(1f)
-                setChipStrokeColorResource(R.color.text_secondary)
+                chipStrokeWidth = 1f
+                chipStrokeColor = chipStroke
+                isChipIconVisible = false
                 setOnClickListener {
                     selectedCategory = category
                     filterBooks(binding.searchView.query.toString())
@@ -131,6 +146,23 @@ class MainActivity : AppCompatActivity() {
             }
             binding.categoryChipGroup.addView(chip)
         }
+    }
+
+    private fun setupFooterReveal() {
+        val footer = findViewById<View>(R.id.footerMain) ?: return
+        val recyclerView = binding.recyclerViewBooks
+
+        fun updateFooterVisibility() {
+            val atBottom = !recyclerView.canScrollVertically(1)
+            footer.visibility = if (atBottom) View.VISIBLE else View.GONE
+        }
+
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                updateFooterVisibility()
+            }
+        })
+        recyclerView.post { updateFooterVisibility() }
     }
     
     private fun filterBooks(query: String) {

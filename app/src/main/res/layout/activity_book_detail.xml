@@ -10,19 +10,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Toolbar -->
-        <com.google.android.material.appbar.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            app:elevation="0dp">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@android:color/transparent" />
-        </com.google.android.material.appbar.AppBarLayout>
+        <!-- Header removed as requested -->
 
         <!-- Book Image Card -->
         <com.google.android.material.card.MaterialCardView
@@ -108,8 +96,10 @@
                     android:id="@+id/fabFavorite"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_heart"
+                    android:src="@drawable/ic_heart_filled"
+                    android:tint="@color/white"
                     app:fabSize="normal"
+                    app:backgroundTint="@color/accent"
                     app:tint="@color/accent" />
             </LinearLayout>
 
@@ -410,5 +400,11 @@
                 android:textColor="@color/white"
                 app:cornerRadius="@dimen/radius_medium" />
         </LinearLayout>
+
+        <include
+            layout="@layout/footer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_16" />
     </LinearLayout>
 </ScrollView>

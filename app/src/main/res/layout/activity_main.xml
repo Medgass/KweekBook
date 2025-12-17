@@ -6,24 +6,7 @@
     android:orientation="vertical"
     android:background="@color/background">
 
-    <!-- Toolbar -->
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/toolbar_color"
-        android:elevation="4dp"
-        app:elevation="4dp">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-                android:background="@color/toolbar_color"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:titleTextColor="@color/white"
-            app:logo="@mipmap/logo_kweekbook"
-            app:titleMarginStart="8dp" />
-    </com.google.android.material.appbar.AppBarLayout>
+    <!-- Header removed as requested -->
 
     <!-- Search Bar -->
     <androidx.appcompat.widget.SearchView
@@ -116,9 +99,11 @@
 
     <!-- Footer placed above bottom nav for better layout spacing -->
     <include
+        android:id="@+id/footerMain"
         layout="@layout/footer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
 
     <!-- Bottom Navigation pinned at bottom -->
     <include

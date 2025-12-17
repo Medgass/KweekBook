@@ -16,7 +16,6 @@ class HomePageActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home_page)
 
         val enterButton = findViewById<MaterialButton>(R.id.enterButton)
-        
         enterButton?.setOnClickListener {
             try {
                 val intent = Intent(this, LoginActivity::class.java)
@@ -26,5 +25,6 @@ class HomePageActivity : AppCompatActivity() {
                 e.printStackTrace()
             }
         }
+        
     }
 }

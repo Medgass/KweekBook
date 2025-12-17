@@ -6,11 +6,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.kweekbook.data.BooksData
 import com.kweekbook.model.Book
 
 class BookDetailActivity : AppCompatActivity() {
@@ -29,38 +29,24 @@ class BookDetailActivity : AppCompatActivity() {
             return
         }
 
-        // Setup toolbar
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
+        // No toolbar (header removed)
 
-        // Load book data (from database or sample data)
+        // Load book data from in-memory dataset
         loadBookDetails(bookId)
     }
 
     private fun loadBookDetails(bookId: Int) {
-        // TODO: Load from database
-        // For now, create sample book
-        book = Book(
-            id = bookId,
-            title = "Livre Example",
-            author = "Auteur",
-            image = "",
-            description = "Description du livre",
-            year = 2024,
-            genre = "Genre",
-            pages = 300,
-            isbn = "978-XXX",
-            rating = 4.5,
-            language = "Français",
-            publisher = "Éditeur",
-            status = "available",
-            category = "Catégorie",
-            maxBorrowDays = 30,
-            totalCopies = 5,
-            availableCopies = 5
-        )
+        val found = BooksData.sampleBooks.firstOrNull { it.id == bookId }
+        if (found == null) {
+            finish()
+            return
+        }
+        book = found
+
+        // Initialize favorite state from SharedPreferences
+        val prefs = getSharedPreferences("KweekBookPrefs", MODE_PRIVATE)
+        val favIds = prefs.getStringSet("favorite_ids", emptySet()) ?: emptySet()
+        isFavorite = favIds.contains(book.id.toString())
 
         displayBookDetails()
     }
@@ -107,8 +93,11 @@ class BookDetailActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.categoryChip).text = book.category
 
         // Favorite button
-        findViewById<FloatingActionButton>(R.id.fabFavorite).setOnClickListener {
+        val fab = findViewById<FloatingActionButton>(R.id.fabFavorite)
+        updateFavoriteIcon()
+        fab.setOnClickListener {
             isFavorite = !isFavorite
+            persistFavoriteState(isFavorite)
             updateFavoriteIcon()
             Toast.makeText(this, if (isFavorite) "Ajouté aux favoris" else "Retiré des favoris", Toast.LENGTH_SHORT).show()
         }
@@ -131,6 +120,13 @@ class BookDetailActivity : AppCompatActivity() {
         findViewById<FloatingActionButton>(R.id.fabFavorite).setImageResource(
             if (isFavorite) R.drawable.ic_heart_filled else R.drawable.ic_heart
         )
+    }
+
+    private fun persistFavoriteState(favorite: Boolean) {
+        val prefs = getSharedPreferences("KweekBookPrefs", MODE_PRIVATE)
+        val current = prefs.getStringSet("favorite_ids", emptySet())?.toMutableSet() ?: mutableSetOf()
+        if (favorite) current.add(book.id.toString()) else current.remove(book.id.toString())
+        prefs.edit().putStringSet("favorite_ids", current).apply()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

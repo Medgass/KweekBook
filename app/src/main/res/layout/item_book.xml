@@ -59,15 +59,25 @@
                     android:id="@+id/textViewCategory"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_pill_primary"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="4dp"
                     android:textSize="@dimen/text_size_small"
-                    android:textColor="@color/text_secondary" />
+                    android:textColor="@android:color/white" />
 
-                <TextView
-                    android:id="@+id/textViewRating"
-                    android:layout_width="match_parent"
+                <RatingBar
+                    android:id="@+id/ratingBarBook"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_4"
-                    android:textSize="@dimen/text_size_small" />
+                    android:numStars="5"
+                    android:rating="3.5"
+                    android:scaleX="0.6"
+                    android:scaleY="0.6"
+                    android:transformPivotX="0dp"
+                    android:transformPivotY="0dp"
+                    style="?android:attr/ratingBarStyleSmall"
+                    android:progressTint="@color/accent" />
             </LinearLayout>
 
             <Button

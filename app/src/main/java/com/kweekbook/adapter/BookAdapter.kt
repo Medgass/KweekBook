@@ -23,7 +23,7 @@ class BookAdapter(
                 textViewTitle.text = book.title
                 textViewAuthor.text = book.author
                 textViewCategory.text = book.category
-                textViewRating.text = "⭐ ${book.rating}"
+                ratingBarBook.rating = book.rating.toFloat()
                 
                 // Load image using Glide
                 Glide.with(imageViewBook.context)

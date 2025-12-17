@@ -32,6 +32,7 @@
         app:layout_constraintBottom_toTopOf="@+id/titleText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintVertical_chainStyle="packed"
         android:layout_marginBottom="@dimen/spacing_32">
 
@@ -73,6 +74,7 @@
         app:layout_constraintBottom_toTopOf="@+id/subtitleText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         android:layout_marginBottom="@dimen/spacing_8" />
 
     <!-- Subtitle -->
@@ -87,13 +89,14 @@
         app:layout_constraintBottom_toTopOf="@+id/enterButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         android:layout_marginBottom="@dimen/spacing_48" />
 
     <!-- Enter Button -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/enterButton"
         android:layout_width="0dp"
-        android:layout_height="@dimen/button_height"
+        android:layout_height="64dp"
         android:text="@string/enter_library"
         android:textSize="@dimen/text_size_large"
         android:textStyle="bold"
@@ -106,6 +109,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginStart="@dimen/spacing_32"
-        android:layout_marginEnd="@dimen/spacing_32" />
+        android:layout_marginEnd="@dimen/spacing_32"
+        android:layout_marginBottom="@dimen/spacing_32" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
