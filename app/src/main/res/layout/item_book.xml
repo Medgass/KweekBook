@@ -23,24 +23,23 @@
 
         <TextView
             android:id="@+id/textViewTitle"
+            style="@style/TextStyle.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_8"
             android:ellipsize="end"
             android:maxLines="2"
-            android:textSize="@dimen/text_size_large"
             android:textStyle="bold"
             android:textColor="@color/text_primary" />
 
         <TextView
             android:id="@+id/textViewAuthor"
+            style="@style/TextStyle.Subtitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_4"
             android:ellipsize="end"
-            android:maxLines="1"
-            android:textSize="@dimen/text_size_normal"
-            android:textColor="@color/text_secondary" />
+            android:maxLines="1" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -80,12 +79,37 @@
                     android:progressTint="@color/accent" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/buttonBorrow"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/button_borrow"
-                style="@style/ButtonStyle.Primary" />
+                android:orientation="horizontal"
+                android:layout_gravity="end"
+                android:gravity="center_vertical"
+                android:layout_marginTop="8dp">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonReserve"
+                    style="@style/ButtonStyle.Warning"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_weight="1"
+                    android:paddingHorizontal="8dp"
+                    android:contentDescription="@string/button_reserve"
+                    android:layout_marginEnd="8dp"
+                    android:ellipsize="end"
+                    android:maxLines="1" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonBorrow"
+                    style="@style/ButtonStyle.Success"
+                    android:layout_width="0dp"
+                    android:layout_height="36dp"
+                    android:layout_weight="1"
+                    android:paddingHorizontal="8dp"
+                    android:contentDescription="@string/button_borrow"
+                    android:ellipsize="end"
+                    android:maxLines="1" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

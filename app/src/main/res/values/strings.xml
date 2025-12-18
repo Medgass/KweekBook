@@ -14,6 +14,9 @@
     <string name="book_category">Catégorie</string>
     <string name="button_borrow">Emprunter</string>
     <string name="button_reserve">Réserver</string>
+    <string name="button_borrowed">Emprunté</string>
+    <string name="button_reserved">Réservé</string>
+    <string name="button_cancel_reservation">Annuler Réservation</string>
     <string name="button_return">Retourner</string>
     
     <!-- Book Detail -->
@@ -59,6 +62,7 @@
     <string name="button_logout">Déconnexion</string>
     <string name="button_settings">Paramètres</string>
     <string name="button_about">À propos</string>
+    <string name="button_back">Retour</string>
     
     <!-- Navigation -->
     <string name="nav_home">Accueil</string>

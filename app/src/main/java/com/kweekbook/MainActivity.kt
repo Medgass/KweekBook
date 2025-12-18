@@ -48,21 +48,24 @@ class MainActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.nav_home -> true
                 R.id.nav_favorites -> {
-                    startActivity(Intent(this, FavoritesActivity::class.java))
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-                    finish()
+                    if (this !is FavoritesActivity) {
+                        startActivity(Intent(this, FavoritesActivity::class.java))
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                    }
                     true
                 }
                 R.id.nav_profile -> {
-                    startActivity(Intent(this, UserProfileActivity::class.java))
-                    overridePendingTransition(R.anim.slide_up, R.anim.fade_out)
-                    finish()
+                    if (this !is UserProfileActivity) {
+                        startActivity(Intent(this, UserProfileActivity::class.java))
+                        overridePendingTransition(R.anim.slide_up, R.anim.fade_out)
+                    }
                     true
                 }
                 R.id.nav_settings -> {
-                    startActivity(Intent(this, SettingsActivity::class.java))
-                    overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-                    finish()
+                    if (this !is SettingsActivity) {
+                        startActivity(Intent(this, SettingsActivity::class.java))
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
+                    }
                     true
                 }
                 else -> false
@@ -78,9 +81,14 @@ class MainActivity : AppCompatActivity() {
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
             },
             onBorrowClick = { book ->
-                Toast.makeText(this, "Emprunter: ${book.title}", Toast.LENGTH_SHORT).show()
+                borrowBook(book)
+            },
+            onReserveClick = { book ->
+                reserveBook(book)
             }
         )
+
+
         
         // Setup RecyclerView
         binding.recyclerViewBooks.apply {
@@ -106,6 +114,31 @@ class MainActivity : AppCompatActivity() {
         allBooksCached = applyStatusOverrides(BooksData.sampleBooks)
         bookAdapter.submitList(allBooksCached)
         updateEmptyState(allBooksCached.isEmpty())
+    }
+
+    private fun borrowBook(book: com.kweekbook.model.Book) {
+        val prefs = getSharedPreferences("KweekBookPrefs", MODE_PRIVATE)
+        val borrowed = prefs.getStringSet("borrowed_ids", emptySet())?.toMutableSet() ?: mutableSetOf()
+        borrowed.add(book.id.toString())
+        prefs.edit().putStringSet("borrowed_ids", borrowed).apply()
+        // Remove from reserved if present
+        val reserved = prefs.getStringSet("reserved_ids", emptySet())?.toMutableSet() ?: mutableSetOf()
+        if (reserved.remove(book.id.toString())) {
+            prefs.edit().putStringSet("reserved_ids", reserved).apply()
+        }
+        allBooksCached = applyStatusOverrides(BooksData.sampleBooks)
+        bookAdapter.submitList(allBooksCached)
+        Toast.makeText(this, "Emprunté: ${book.title}", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun reserveBook(book: com.kweekbook.model.Book) {
+        val prefs = getSharedPreferences("KweekBookPrefs", MODE_PRIVATE)
+        val reserved = prefs.getStringSet("reserved_ids", emptySet())?.toMutableSet() ?: mutableSetOf()
+        reserved.add(book.id.toString())
+        prefs.edit().putStringSet("reserved_ids", reserved).apply()
+        allBooksCached = applyStatusOverrides(BooksData.sampleBooks)
+        bookAdapter.submitList(allBooksCached)
+        Toast.makeText(this, "Réservé: ${book.title}", Toast.LENGTH_SHORT).show()
     }
     
     private fun setupCategoryChips() {
@@ -136,9 +169,10 @@ class MainActivity : AppCompatActivity() {
                 rippleColor = ColorStateList.valueOf(accentDark)
                 setEnsureMinTouchTargetSize(false)
                 setPadding(24, 12, 24, 12)
-                chipStrokeWidth = 1f
-                chipStrokeColor = chipStroke
+                chipStrokeWidth = 0f
+                chipCornerRadius = resources.getDimension(R.dimen.corner_radius_large)
                 isChipIconVisible = false
+                isClickable = true
                 setOnClickListener {
                     selectedCategory = category
                     filterBooks(binding.searchView.query.toString())

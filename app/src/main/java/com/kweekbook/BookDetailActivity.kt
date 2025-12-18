@@ -55,7 +55,7 @@ class BookDetailActivity : AppCompatActivity() {
         // Initialize favorite state from SharedPreferences
         val prefs = getSharedPreferences("KweekBookPrefs", MODE_PRIVATE)
         val favIds = prefs.getStringSet("favorite_ids", emptySet()) ?: emptySet()
-        isFavorite = favIds.contains(book.id.toString())
+        isFavorite = favIds.contains(sourceBook.id.toString())
         book = applyStatusOverrides(sourceBook)
         displayBookDetails()
     }

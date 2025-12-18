@@ -12,7 +12,8 @@ import com.kweekbook.model.Book
 
 class BookAdapter(
     private val onBookClick: (Book) -> Unit,
-    private val onBorrowClick: (Book) -> Unit
+    private val onBorrowClick: (Book) -> Unit,
+    private val onReserveClick: (Book) -> Unit = {}
 ) : ListAdapter<Book, BookAdapter.BookViewHolder>(BookDiffCallback()) {
     
     inner class BookViewHolder(private val binding: ItemBookBinding) :
@@ -33,24 +34,52 @@ class BookAdapter(
                     .centerCrop()
                     .into(imageViewBook)
                 
+                // Configure buttons colors
+                buttonBorrow.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
+                    androidx.core.content.ContextCompat.getColor(binding.root.context, R.color.success)
+                ))
+                buttonReserve.setBackgroundTintList(android.content.res.ColorStateList.valueOf(
+                    androidx.core.content.ContextCompat.getColor(binding.root.context, R.color.warning)
+                ))
+                
                 // Handle status
+                val ctx = binding.root.context
                 when (book.status) {
                     "available" -> {
-                        buttonBorrow.text = "Emprunter"
+                        buttonBorrow.text = ctx.getString(R.string.button_borrow)
                         buttonBorrow.isEnabled = true
+                        buttonReserve.text = ctx.getString(R.string.button_reserve)
+                        buttonReserve.isEnabled = true
                     }
                     "borrowed" -> {
-                        buttonBorrow.text = "Emprunté"
+                        buttonBorrow.text = ctx.getString(R.string.button_borrowed)
                         buttonBorrow.isEnabled = false
+                        buttonReserve.text = ctx.getString(R.string.button_reserve)
+                        buttonReserve.isEnabled = true
                     }
                     "reserved" -> {
-                        buttonBorrow.text = "Réservé"
-                        buttonBorrow.isEnabled = false
+                        buttonReserve.text = ctx.getString(R.string.button_reserved)
+                        buttonReserve.isEnabled = false
+                        buttonBorrow.text = ctx.getString(R.string.button_borrow)
+                        buttonBorrow.isEnabled = true
+                    }
+                    else -> {
+                        buttonBorrow.text = ctx.getString(R.string.button_borrow)
+                        buttonBorrow.isEnabled = true
+                        buttonReserve.text = ctx.getString(R.string.button_reserve)
+                        buttonReserve.isEnabled = true
                     }
                 }
-                
+
+                // Accessibility & visual states
+                buttonBorrow.alpha = if (buttonBorrow.isEnabled) 1f else 0.5f
+                buttonReserve.alpha = if (buttonReserve.isEnabled) 1f else 0.5f
+                buttonBorrow.contentDescription = buttonBorrow.text
+                buttonReserve.contentDescription = buttonReserve.text
+
                 root.setOnClickListener { onBookClick(book) }
                 buttonBorrow.setOnClickListener { onBorrowClick(book) }
+                buttonReserve.setOnClickListener { onReserveClick(book) }
             }
         }
     }
